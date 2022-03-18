@@ -1,0 +1,27 @@
+targets:
+  measurements:
+    kind: relation
+    mapping: measurements_extracted
+    relation: measurements
+    partition:
+      year: $year
+
+  measurements_mssql_merge:
+    kind: merge
+    mapping: measurements_deduplicated
+    relation: measurements_mssql
+    clauses:
+      - action: insert
+      - action: update
+
+  measurements_mssql_append:
+    kind: relation
+    mapping: measurements_deduplicated
+    relation: measurements_mssql
+    mode: append
+
+  measurements_mssql_overwrite:
+    kind: relation
+    mapping: measurements_deduplicated
+    relation: measurements_mssql
+    mode: overwrite

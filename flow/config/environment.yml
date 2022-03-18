@@ -1,0 +1,7 @@
+environment:
+  - basedir=file:///tmp/weather
+  - jdbc_driver=$System.getenv('JDBC_DRIVER', 'com.microsoft.sqlserver.jdbc.SQLServerDriver')
+  - jdbc_url=$System.getenv('JDBC_URL', 'jdbc:sqlserver://localhost:1433')
+  - jdbc_db=$System.getenv('JDBC_DB', 'weather')
+  - jdbc_username=$System.getenv('JDBC_USERNAME', 'sa')
+  - jdbc_password=$System.getenv('JDBC_PASSWORD' ,'yourStrong(!)Password')

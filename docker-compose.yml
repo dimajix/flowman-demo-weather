@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  flowman:
+    image: dimajix/flowman:0.23.0-oss-spark3.2-hadoop3.3
+    command: bash
+    volumes:
+      - ./flow:/opt/flowman/flow
+      - ./conf:/opt/flowman/conf
+    environment:
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - SPARK_MASTER=local[10]
+      - JDBC_URL=jdbc:sqlserver://sqlserver:1433
+      - JDBC_DB=weather
+      - JDBC_USERNAME=sa
+      - JDBC_PASSWORD=yourStrong(!)Password
+      #- AWS_ACCESS_KEY_ID=
+      #- AWS_SECRET_ACCESS_KEY=
+      #- S3_ENDPOINT=s3.eu-central-1.amazonaws.com
+      #- S3_PROXY_HOST=
+      #- S3_PROXY_PORT=-1
+
+  sqlserver:
+    image: dimajix/flowman-mssql
+    build:
+      context: sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - DB_NAME=weather
+      - SA_PASSWORD=yourStrong(!)Password
+    ports:
+      - "1433:1433"

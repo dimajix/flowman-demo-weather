@@ -1,0 +1,9 @@
+# Declare files that will always have CRLF line endings on checkout.
+*.sh text eol=lf
+*.yml text eol=lf
+*.txt text eol=lf
+*.md text eol=lf
+*.avsc text eol=lf
+LICENSE text eol=lf
+NOTICE text eol=lf
+Dockerfile text eol=lf
