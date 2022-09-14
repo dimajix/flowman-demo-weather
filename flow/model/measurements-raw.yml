@@ -10,7 +10,7 @@ relations:
         granularity: 1
         description: "The year when the measurement was made"
     schema:
-      kind: embedded
+      kind: inline
       fields:
         - name: raw_data
           type: string

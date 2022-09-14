@@ -3,13 +3,13 @@
     "fields": [
         {
             "name": "usaf",
-            "type": "integer",
+            "type": "char(6)",
             "nullable": false,
             "metadata": {}
         },
         {
             "name": "wban",
-            "type": "integer",
+            "type": "char(5)",
             "nullable": false,
             "metadata": {}
         },

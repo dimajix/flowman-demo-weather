@@ -56,7 +56,7 @@ mappings:
 
   # This mapping refers to the processed data stored as Parquet on the local filesystem
   measurements:
-    kind: read
+    kind: relation
     relation: measurements
     partitions:
       year: $year
