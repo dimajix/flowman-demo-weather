@@ -1,5 +1,5 @@
 connections:
-  sql_server:
+  mariadb:
     driver: "$jdbc_driver"
     url: "$jdbc_url"
     username: "$jdbc_username"

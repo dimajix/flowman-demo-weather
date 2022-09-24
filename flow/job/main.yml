@@ -10,6 +10,7 @@ jobs:
     # List all targets which should be built as part of the `main` job
     targets:
       - measurements
+      - measurements_jdbc
       - stations
       - aggregates
       # Generate documentation
@@ -26,12 +27,3 @@ jobs:
             category: "$category"
             kind: "$kind"
             name: "$name"
-
-
-  mssql:
-    parameters:
-      - name: year
-        type: Integer
-        default: 2013
-    targets:
-      - measurements_mssql_overwrite

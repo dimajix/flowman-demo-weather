@@ -2,32 +2,59 @@ version: "3"
 
 services:
   flowman:
-    image: dimajix/flowman:0.27.0-oss-spark3.2-hadoop3.3
+    image: dimajix/flowman:0.27.0-oss-spark3.3-hadoop3.3
     command: bash
     volumes:
-      - ./flow:/opt/flowman/flow
+      - ./conf:/opt/flowman/conf
+      - ./flow:/home/flowman/flow
+    environment:
+      - http_proxy=${http_proxy}
+      - https_proxy=${https_proxy}
+      - SPARK_MASTER=local[10]
+
+  # The Flowman History Server
+  flowman-server:
+    image: dimajix/flowman:0.27.0-oss-spark3.3-hadoop3.3
+    command: flowman-server
+    volumes:
       - ./conf:/opt/flowman/conf
     environment:
       - http_proxy=${http_proxy}
       - https_proxy=${https_proxy}
       - SPARK_MASTER=local[10]
-      - JDBC_URL=jdbc:sqlserver://sqlserver:1433
-      - JDBC_DB=weather
-      - JDBC_USERNAME=sa
-      - JDBC_PASSWORD=yourStrong(!)Password
-      #- AWS_ACCESS_KEY_ID=
-      #- AWS_SECRET_ACCESS_KEY=
-      #- S3_ENDPOINT=s3.eu-central-1.amazonaws.com
-      #- S3_PROXY_HOST=
-      #- S3_PROXY_PORT=-1
-
-  sqlserver:
-    image: dimajix/flowman-mssql
-    build:
-      context: sqlserver
-    environment:
-      - ACCEPT_EULA=Y
-      - DB_NAME=weather
-      - SA_PASSWORD=yourStrong(!)Password
     ports:
-      - "1433:1433"
+      - 8080:8080
+
+  # The MariaDB server will host three databases
+  #  - The "weather" database, which contains the transformed result data
+  #  - The "flowman_history" database, which is used by the Flowman History Server
+  #  - The "flowman_metrics" database, which contains additional execution metrics
+  mariadb:
+    image: mariadb:10.9.3
+    environment:
+      - MARIADB_ROOT_PASSWORD=rootpwd
+    command:
+      - --sql-mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION,ANSI_QUOTES
+    volumes:
+      - ./docker/mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql:z
+    ports:
+      - 3306:3306
+
+  # Prometheus server will store Flowman execution metrics to be displayed in Grafana
+  prometheus:
+    image: prom/prometheus:v2.37.1
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:z
+    ports:
+      - 9090:9090
+
+  # The Prometheus Push Gateway is required by Flowman for submitting execution metrics
+  pushgateway:
+    image: prom/pushgateway:v1.4.3
+    ports:
+      - 9091:9091
+
+  grafana:
+    image: grafana/grafana:9.1.6
+    ports:
+      - 3000:3000

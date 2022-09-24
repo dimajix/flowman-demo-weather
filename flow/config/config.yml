@@ -18,7 +18,7 @@ config:
   # Parallelism of instantiating mappings
   - flowman.execution.mapping.parallelism=4
   # Default migration policy for relations (default: RELAXED)
-  - flowman.default.relation.migrationPolicy=RELAXED
+  - flowman.default.relation.migrationPolicy=STRICT
   # Default migration strategy for relations (default: ALTER)
   - flowman.default.relation.migrationStrategy=ALTER
   # Default output mode for build targets (default: OVERWRITE)

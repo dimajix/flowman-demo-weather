@@ -1,7 +1,82 @@
 name: "default"
 
+# The following definition provides a "run history" stored in a database. If nothing else is specified, the database
+# is stored locally as a Derby database. If you do not want to use the history, you can simply remove the whole
+# 'history' block from this file.
+history:
+  kind: jdbc
+  retries: 3
+  timeout: 1000
+  connection:
+    driver: "org.mariadb.jdbc.Driver"
+    url: "jdbc:mariadb://mariadb/flowman_history"
+    username: "flowman_history"
+    password: "flowman_history"
+
+
+hooks:
+  kind: report
+  location: ${project.basedir}/generated-report
+  metrics:
+    labels:
+      project: ${project.name}
+      phase: ${phase}
+    metrics:
+      # Collect everything
+      - selector:
+          name: .*
+        labels:
+          category: ${category}
+          kind: ${kind}
+          name: ${name}
+      # This metric contains the number of records per output
+      - name: output_records
+        selector:
+          name: target_records
+          labels:
+            category: target
+        labels:
+          target: ${name}
+      # This metric contains the processing time per output
+      - name: output_time
+        selector:
+          name: target_runtime
+          labels:
+            category: target
+        labels:
+          target: ${name}
+      # This metric contains the overall processing time
+      - name: processing_time
+        selector:
+          name: job_runtime
+          labels:
+            category: job
+
+
 metrics:
   - kind: console
+  # Publish metrics to Prometheus
+  - kind: prometheus
+    url: $System.getenv('URL_PROMETHEUS_PUSHGW', 'http://pushgateway:9091')
+    labels:
+      namespace: ${namespace.name}
+      project: ${project.name}
+      job: ${job.name}
+      phase: ${phase}
+  # Publish metrics to SQL database
+  - kind: jdbc
+    connection:
+      kind: jdbc
+      driver: "org.mariadb.jdbc.Driver"
+      url: "jdbc:mariadb://mariadb/flowman_metrics"
+      username: "flowman_metrics"
+      password: "flowman_metrics"
+    labels:
+      project: ${project.name}
+      version: ${project.version}
+      job: ${job.name}
+      phase: ${phase}
+
 
 config:
   - spark.sql.warehouse.dir=/opt/sxp/flowman/hive/warehouse
@@ -10,8 +85,9 @@ config:
   - spark.hadoop.datanucleus.rdbms.datastoreAdapterClassName=org.datanucleus.store.rdbms.adapter.DerbyAdapter
 
   - spark.executor.cores=$System.getenv('SPARK_EXECUTOR_CORES', '8')
-  - spark.executor.memory=$System.getenv('SPARK_EXECUTOR_MEMORY', '54g')
+  - spark.executor.memory=$System.getenv('SPARK_EXECUTOR_MEMORY', '16g')
 
 plugins:
   - flowman-aws
-  - flowman-mssqlserver
+  - flowman-mariadb
+  - flowman-mysql

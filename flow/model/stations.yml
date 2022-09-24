@@ -1,12 +1,13 @@
 relations:
   stations:
-    kind: file
+    kind: jdbcTable
     description: "The 'stations' table contains meta data on all weather stations"
-    format: parquet
-    location: "$basedir/stations/"
+    connection: mariadb
+    database: $jdbc_db
+    table: stations
     schema:
-      kind: avro
-      file: "${project.basedir}/schema/stations.avsc"
+      kind: mapping
+      mapping: stations_conformed
 
     documentation:
       checks:

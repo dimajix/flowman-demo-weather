@@ -66,17 +66,20 @@ relations:
           - wban
 
 
-  measurements_mssql:
-    kind: sqlserver
-    connection: sql_server
-    database: dbo
+  measurements_jdbc:
+    kind: jdbcTable
+    connection: mariadb
+    database: $jdbc_db
     table: measurement
-    #properties:
-      # schemaCheckEnabled: false
-      # tableLock: true
+    stagingTable: measurement_staging
     schema:
       kind: spark
       file: "${project.basedir}/schema/measurements.json"
+    # Add partition column
+    partitions:
+      - name: year
+        type: integer
+        granularity: 1
     primaryKey:
       - usaf
       - wban

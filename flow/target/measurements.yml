@@ -6,22 +6,9 @@ targets:
     partition:
       year: $year
 
-  measurements_mssql_merge:
-    kind: merge
-    mapping: measurements_deduplicated
-    relation: measurements_mssql
-    clauses:
-      - action: insert
-      - action: update
-
-  measurements_mssql_append:
+  measurements_jdbc:
     kind: relation
     mapping: measurements_deduplicated
-    relation: measurements_mssql
-    mode: append
-
-  measurements_mssql_overwrite:
-    kind: relation
-    mapping: measurements_deduplicated
-    relation: measurements_mssql
-    mode: overwrite
+    relation: measurements_jdbc
+    partition:
+      year: $year
