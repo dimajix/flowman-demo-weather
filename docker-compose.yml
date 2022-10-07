@@ -14,7 +14,7 @@ services:
 
   # The Flowman History Server
   flowman-server:
-    image: dimajix/flowman:0.27.0-oss-spark3.3-hadoop3.3
+    image: dimajix/flowman:0.28.0-oss-spark3.3-hadoop3.3
     command: flowman-server
     volumes:
       - ./conf:/opt/flowman/conf
