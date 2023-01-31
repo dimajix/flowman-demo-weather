@@ -12,7 +12,7 @@ access.
 
 ## 1. Running Flowman in Docker
 
-First you need to start several Docker containers to provide an environment. Specifically this will start a 
+First, you need to start several Docker containers to provide an environment. Specifically this will start a 
 MariaDB server which will be used for three different purposes: Storing the transformed weather data, storing
 execution metrics and storing history information.
 

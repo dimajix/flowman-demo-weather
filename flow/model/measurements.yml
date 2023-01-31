@@ -69,7 +69,6 @@ relations:
   measurements_jdbc:
     kind: jdbcTable
     connection: mariadb
-    database: $jdbc_db
     table: measurement
     stagingTable: measurement_staging
     schema:

@@ -2,7 +2,7 @@ version: "3"
 
 services:
   flowman:
-    image: dimajix/flowman:0.27.0-oss-spark3.3-hadoop3.3
+    image: dimajix/flowman:0.30.0-oss-spark3.3-hadoop3.3
     command: bash
     volumes:
       - ./conf:/opt/flowman/conf
@@ -11,17 +11,30 @@ services:
       - http_proxy=${http_proxy}
       - https_proxy=${https_proxy}
       - SPARK_MASTER=local[10]
+      - JDBC_DRIVER=org.mariadb.jdbc.Driver
+      - JDBC_URL=jdbc:mariadb://mariadb/weather
+      - JDBC_USERNAME=weather
+      - JDBC_PASSWORD=weather
+      - HISTORY_JDBC_DRIVER=org.mariadb.jdbc.Driver
+      - HISTORY_JDBC_URL=jdbc:mariadb://mariadb/flowman_history
+      - HISTORY_JDBC_USERNAME=flowman_history
+      - HISTORY_JDBC_PASSWORD=flowman_history
+      - URL_PROMETHEUS_PUSHGW=http://pushgateway:9091
 
   # The Flowman History Server
   flowman-server:
-    image: dimajix/flowman:0.28.0-oss-spark3.3-hadoop3.3
+    image: dimajix/flowman:0.30.0-oss-spark3.3-hadoop3.3
     command: flowman-server
     volumes:
       - ./conf:/opt/flowman/conf
     environment:
       - http_proxy=${http_proxy}
       - https_proxy=${https_proxy}
-      - SPARK_MASTER=local[10]
+      - SPARK_MASTER=local[1]
+      - HISTORY_JDBC_DRIVER=org.mariadb.jdbc.Driver
+      - HISTORY_JDBC_URL=jdbc:mariadb://mariadb/flowman_history
+      - HISTORY_JDBC_USERNAME=flowman_history
+      - HISTORY_JDBC_PASSWORD=flowman_history
     ports:
       - 8080:8080
 

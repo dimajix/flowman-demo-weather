@@ -3,3 +3,4 @@
 velocity.log*
 derby.log
 metastore_db/
+target/

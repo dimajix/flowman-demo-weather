@@ -2,7 +2,6 @@ relations:
   aggregates:
     kind: jdbcTable
     connection: mariadb
-    database: $jdbc_db
     table: aggregates
     # Add partition column
     partitions:

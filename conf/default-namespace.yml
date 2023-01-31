@@ -8,10 +8,10 @@ history:
   retries: 3
   timeout: 1000
   connection:
-    driver: "org.mariadb.jdbc.Driver"
-    url: "jdbc:mariadb://mariadb/flowman_history"
-    username: "flowman_history"
-    password: "flowman_history"
+    driver: "$System.getenv('HISTORY_JDBC_DRIVER', 'org.mariadb.jdbc.Driver')"
+    url: "$System.getenv('HISTORY_JDBC_URL', 'jdbc:mariadb://mariadb/flowman_history')"
+    username: "$System.getenv('HISTORY_JDBC_USERNAME', 'flowman_history')"
+    password: "$System.getenv('HISTORY_JDBC_PASSWORD', 'flowman_history')"
 
 
 hooks:
@@ -79,11 +79,6 @@ metrics:
 
 
 config:
-  - spark.sql.warehouse.dir=/opt/sxp/flowman/hive/warehouse
-  - spark.hadoop.hive.metastore.uris=
-  - spark.hadoop.javax.jdo.option.ConnectionURL=jdbc:derby:;databaseName=/opt/sxp/flowman/hive/db;create=true
-  - spark.hadoop.datanucleus.rdbms.datastoreAdapterClassName=org.datanucleus.store.rdbms.adapter.DerbyAdapter
-
   - spark.executor.cores=$System.getenv('SPARK_EXECUTOR_CORES', '8')
   - spark.executor.memory=$System.getenv('SPARK_EXECUTOR_MEMORY', '16g')
 

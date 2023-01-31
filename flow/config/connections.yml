@@ -4,6 +4,3 @@ connections:
     url: "$jdbc_url"
     username: "$jdbc_username"
     password: "$jdbc_password"
-    properties:
-      # We need to specify the database name already as part of connection, otherwise the login won't work
-      databaseName: "$jdbc_db"
