@@ -1,6 +1,6 @@
 # Flowman Weather Demo
 
-This project is a demonstration of the capabilities of Flowman. It provides an initial understanding of the project
+This project demonstrates some capabilities of Flowman. It provides an initial understanding of the project
 setup, but also shows how to set up a database for execution metrics, the Flowman History Server and Prometheus & Grafana
 to collect and show execution metrics.
 
