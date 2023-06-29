@@ -1,0 +1,25 @@
+flowman:
+  version: ${flowman.version}
+  distribution: com.dimajix.flowman:flowman-dist:bin:${flowman.version}
+  plugins:
+    - flowman-avro
+    - flowman-aws
+    - flowman-mariadb
+    - flowman-mysql
+
+# List of subdirectories containing Flowman projects
+projects:
+  - flow
+
+
+# List of packages to be built
+packages:
+  dist:
+    kind: dist
+
+execution:
+  javaOptions:
+    - -Dhttp.proxyHost=${http.proxyHost}
+    - -Dhttp.proxyPort=${http.proxyPort}
+    - -Dhttps.proxyHost=${https.proxyHost}
+    - -Dhttps.proxyPort=${https.proxyPort}
